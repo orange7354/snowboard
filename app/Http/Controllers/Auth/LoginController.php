@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -28,6 +31,13 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    protected function loggedOut(Request $request)
+    {
+        return redirect(route('question.index'));
+    }
+
+    private const GUEST_USER_ID = 4;
+
     /**
      * Create a new controller instance.
      *
@@ -38,5 +48,14 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+
+    public function guestLogin()
+    {
+        if (Auth::loginUsingId(self::GUEST_USER_ID)) {
+            return redirect('/title');
+        }
+
+        return redirect('/title');
+    }
     
 }

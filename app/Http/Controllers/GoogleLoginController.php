@@ -20,14 +20,14 @@ class GoogleLoginController extends Controller
         try {
 
             $user = Socialite::driver('google')->user();
-        
+            
             $finduser = User::where('google_id', $user->id)->first();
         
             if($finduser){
         
                 Auth::login($finduser);
         
-                return redirect()->intended('dashboard');
+                return redirect()->intended('title');
         
             }else{
                 $newUser = User::create([
@@ -39,7 +39,7 @@ class GoogleLoginController extends Controller
         
                 Auth::login($newUser);
         
-                return redirect()->intended('dashboard');
+                return redirect()->intended('title');
             }
         
         } catch (Exception $e) {

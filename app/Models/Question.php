@@ -22,4 +22,5 @@ class Question extends Model
 		return $this->hasMany(Comment::class,'question_id','id');
 	}
 
+
 }

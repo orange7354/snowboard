@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="my-3 p-3 bg-white rounded shadow-sm">
+<div class=" my-3 p-3 pt-5 bg-white rounded shadow-sm">
     <h1>質問履歴</h1>
     @foreach($questions as $question)
         <div class="card mb-5">            

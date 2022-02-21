@@ -7,6 +7,15 @@
             <div class="card">
                 <div class="card-header">回答</div>
                 <div class="card-body">
+                @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                @endif
                     <form method="POST" action="{{ route('comments.store')  }}" enctype="multipart/form-data">
                             @csrf
                         <input type="hidden" name='user_id' value="{{ Auth::id() }}">

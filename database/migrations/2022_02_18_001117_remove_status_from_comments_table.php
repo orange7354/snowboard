@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddGoogleIdToUsersTable extends Migration
+class RemoveStatusFromCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class AddGoogleIdToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            Schema::table('users', function ($table) {
-                $table->string('google_id')->nullable();
-            });
+        Schema::table('comments', function (Blueprint $table) {
+            $table->dropColumn('status');
         });
     }
 
@@ -27,8 +25,8 @@ class AddGoogleIdToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('google_id')->nullable();
+        Schema::table('comments', function (Blueprint $table) {
+            $table->integer('status')->defalut('0');
         });
     }
 }

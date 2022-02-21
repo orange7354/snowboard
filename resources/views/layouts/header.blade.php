@@ -14,11 +14,11 @@
   </div>
 </a>
 
-<header class="pb-5">
+<header>
   <!-- Fixed navbar -->
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <!-- <a class="navbar-brand" href="#">Fixed navbar</a> -->
-    <a class="navbar-brand" href="#">固定ナビゲーションバー</a>
+    <a class="navbar-brand" href="#">Snowboard Q&A</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -26,30 +26,30 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
           <!-- <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> -->
-          <a class="nav-link" href="{{ route('question.index') }}">ホーム <span class="sr-only">（現在位置）</span></a>
+          <a class="nav-link" href="{{ route('question.index')}}">ホーム <span class="sr-only">（現在位置）</span></a>
         </li>
-        <li class="nav-item"> 
+        <li class="nav-item">
           <!-- <a class="nav-link" href="#">Link</a> -->
-          <a class="nav-link" href="{{ url('/myquestion') }}" action="GET">質問履歴</a>
+          <a class="nav-link" href="{{ route('question.history') }}" action="GET">質問履歴</a>
         </li>
         <li class="nav-item">
           <!-- <a class="nav-link disabled" href="#">Disabled</a> -->
-          <a class="nav-link disabled" href="#">無効</a>
+          <a  class="nav-link" href="{{ route('question.create') }}" method="GET" class="btn btn-primary my-2">質問する</a>
         </li>
         @if(Route::has('login'))
             @auth
               <li class="nav-item">
-                <a class="nav-link" href="#">{{ Auth::user()->name }}</a>
+                <a class="nav-link" href="#">{{ Auth::user()->name }}さん</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{{ route('logout') }}"
                 onclick="event.preventDefault();
-                document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                document.getElementById('logout-form').submit();"> {{ __('Logout') }}</a>
               </li>
               <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                 @csrf
               </form>
-              <a href="{{ url('/home') }}" class="nav-link">Home</a>
+              
             @else
               <a href="{{ route('login') }}" class="nav-link">ログイン</a>
               @if (Route::has('register'))
@@ -58,9 +58,10 @@
             @endauth
         @endif
       </ul>
-      <form class="form-inline mt-2 mt-md-0">
+      <form class="form-inline mt-2 mt-md-0" action="{{ route('question.search') }}" method="POST">
+        {{ csrf_field() }}
         <!-- <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"> -->
-        <input class="form-control mr-sm-2" type="text" placeholder="検索" aria-label="Search">
+        <input class="form-control mr-sm-2" type="text" placeholder="検索" aria-label="Search" name="search">
         <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">検索</button>
       </form>
@@ -68,7 +69,7 @@
   </nav>
 </header>
 
-<main role="main" class="container">
+<main role="main" class="container mt-5 pt-5">
     @yield('content')
 </main>
 

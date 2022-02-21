@@ -40,7 +40,7 @@ class HomeController extends Controller
                     ->orderBy('updated_at','DESC')
                     ->get();
         $questions->load('category');
-        return view('myquestion',compact('questions'));
+        return view('questions.myquestion',compact('questions'));
     }
 
 }

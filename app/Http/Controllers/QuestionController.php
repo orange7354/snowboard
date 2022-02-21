@@ -58,16 +58,29 @@ class QuestionController extends Controller
     {   
         $data = $request->all();
         $image = $request->file('image');
+        if($image){
+            $fileName = $image->getClientOriginalExtension();
+        }
+
         
         if($request->hasFile('image')){
-            $path = \Storage::put('/public',$image);
-            $path = explode('/',$path);
+            if($fileName=='jpg'){
+                $path = \Storage::put('/public',$image);
+                $path = explode('/',$path);
+                Question::insert(['title'=>$data['title'], 'content'=>$data['content'], 'category_id'=>$data['category_id'], 'user_id'=>\Auth::id(),
+                'image'=>$path[1]]);
+            }elseif($fileName=='mp4'){
+                $path = \Storage::put('/public',$image);
+                $path = explode('/',$path);
+                Question::insert(['title'=>$data['title'], 'content'=>$data['content'], 'category_id'=>$data['category_id'], 'user_id'=>\Auth::id(),
+                'video'=>$path[1]]);
+            }
         }else{
             $path = null;
+            Question::insert(['title'=>$data['title'], 'content'=>$data['content'], 'category_id'=>$data['category_id'], 'user_id'=>\Auth::id(),
+            ]); 
         }
-        Question::insert(['title'=>$data['title'], 'content'=>$data['content'], 'category_id'=>$data['category_id'], 'user_id'=>\Auth::id(),
-                            'image'=>$path[1]]);
-
+        
         return  redirect( route('question.index'));
     }
 
@@ -84,7 +97,10 @@ class QuestionController extends Controller
         ->orderBy('updated_at','DESC')
         ->get();
         $asked_question = Question::find($id);
+        
         $asked_question->load('category','user','comments.user');
+        
+        
         return view('questions.show',compact('questions','asked_question'));
     }
 
@@ -106,9 +122,15 @@ class QuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request )
     {
-        //
+        $inputs = $request->all();
+        Question::where('id',$inputs['question_id'])->update( [ 'status' => $inputs['id'] ]);
+        
+        $asked_question = Question::find($inputs['question_id']);
+        $asked_question->load('category','user','comments.user');
+        
+        return view('questions.show', compact('asked_question'));
     }
 
     /**
@@ -131,6 +153,15 @@ class QuestionController extends Controller
         $search_result = $request->search.'の検索結果'.count($questions).'件';
         
         return view('questions.index',compact('questions','search_result'));
+    }
 
+    public function history()
+    {
+        $questions = question::select('questions.*')
+                    ->where('user_id',\Auth::id())
+                    ->orderBy('updated_at','DESC')
+                    ->get();
+        $questions->load('category');
+        return view('questions.history',compact('questions'));
     }
 }

@@ -28,6 +28,7 @@ class CommentsController extends Controller
     public function create()
     {
         $data = \Request::query();
+        
         return view('comments.create',[
             'question_id' => $data['question_id'],
         ]);
@@ -77,9 +78,13 @@ class CommentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $inputs = $request->all();
+    
+        Comment::where('id',$inputs['id'])->update( [ 'status' => 1 ]);
+        
+        return view('questions.index');
     }
 
     /**
