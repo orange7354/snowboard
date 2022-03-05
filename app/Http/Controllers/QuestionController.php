@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests\QuestionsRequest;
 
-use App\Models\Question;
+use App\Models\question;
 use App\Models\Tag;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
@@ -21,19 +21,23 @@ class QuestionController extends Controller
 
 
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = \Request::query();
-        if(isset($data['category_id'])){
-            $questions = question::where('category_id',$data['category_id']) ->orderBy('updated_at','DESC')->simplePaginate(15);
-            $questions->load('category','user');
-            return view('questions.index',compact('questions'));
-        }else{
-            $questions = question::select('questions.*')
-            ->orderBy('updated_at','DESC')
+        $input = $request->all();
+        if(isset($input['category_id'])){
+            $questions = Question::where('category_id',$input['category_id'])
+            ->orderBy('created_at','DESC')
             ->simplePaginate(15);
             $questions->load('category','user');
-            return view('questions.index',compact('questions'));
+            $categorys = Category::select()->get();
+            return view('questions.index',compact('questions','categorys'));
+        }else{
+            $questions = Question::select()
+            ->orderBy('created_at','DESC')
+            ->simplePaginate(15);
+            $questions->load('category','user');
+            $categorys = Category::select()->get();
+            return view('questions.index',compact('questions','categorys'));
         }
     }
 
@@ -45,7 +49,8 @@ class QuestionController extends Controller
     public function create()
     {
         $user = \Auth::user();
-        return view('questions.create',compact('user'));
+        $categorys = Category::get();
+        return view('questions.create',compact('user','categorys'));
     }
 
     /**
@@ -56,29 +61,27 @@ class QuestionController extends Controller
      */
     public function store(QuestionsRequest $request)
     {   
-        $data = $request->all();
+        $question = new question;
+        $question->fill($request->all());
         $image = $request->file('image');
         if($image){
             $fileName = $image->getClientOriginalExtension();
         }
 
-        
         if($request->hasFile('image')){
             if($fileName=='jpg'){
                 $path = \Storage::put('/public',$image);
                 $path = explode('/',$path);
-                Question::insert(['title'=>$data['title'], 'content'=>$data['content'], 'category_id'=>$data['category_id'], 'user_id'=>\Auth::id(),
-                'image'=>$path[1]]);
+                $question->image = $path[1];
+                $question->save();
             }elseif($fileName=='mp4'){
                 $path = \Storage::put('/public',$image);
                 $path = explode('/',$path);
-                Question::insert(['title'=>$data['title'], 'content'=>$data['content'], 'category_id'=>$data['category_id'], 'user_id'=>\Auth::id(),
-                'video'=>$path[1]]);
+                $question->video = $path[1];
+                $question->save();
             }
         }else{
-            $path = null;
-            Question::insert(['title'=>$data['title'], 'content'=>$data['content'], 'category_id'=>$data['category_id'], 'user_id'=>\Auth::id(),
-            ]); 
+            $question->save();
         }
         
         return  redirect( route('question.index'));
@@ -90,16 +93,12 @@ class QuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($question_id)
     {
-        $questions = question::select('questions.*')
-        ->where('user_id',\Auth::id())
-        ->orderBy('updated_at','DESC')
+        $questions = Question::where('user_id',\Auth::id())
         ->get();
-        $asked_question = Question::find($id);
-        
-        $asked_question->load('category','user','comments.user');
-        
+        $asked_question = Question::find($question_id);
+        $asked_question->load('category','user','answers.user');
         
         return view('questions.show',compact('questions','asked_question'));
     }
@@ -124,11 +123,10 @@ class QuestionController extends Controller
      */
     public function update(Request $request )
     {
-        $inputs = $request->all();
-        Question::where('id',$inputs['question_id'])->update( [ 'status' => $inputs['id'] ]);
+        Question::where('id',$request['question_id'])->update( [ 'status' => $request['id'] ]);
         
-        $asked_question = Question::find($inputs['question_id']);
-        $asked_question->load('category','user','comments.user');
+        $asked_question = Question::find($request['question_id']);
+        $asked_question->load('category','user','answers.user');
         
         return view('questions.show', compact('asked_question'));
     }
@@ -141,25 +139,24 @@ class QuestionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // 
     }
 
     public function search(Request $request)
     {
-        $questions = question::where('title','like',"%{$request->search}%")
+        $questions = Question::where('title','like',"%{$request->search}%")
         ->orwhere('content','like',"&{$request->search}%")
         ->simplePaginate(15);
 
-        $search_result = $request->search.'の検索結果'.count($questions).'件';
+        $search_result_message = $request->search.'の検索結果'.count($questions).'件';
         
-        return view('questions.index',compact('questions','search_result'));
+        return view('questions.index',compact('questions','search_result_message'));
     }
 
     public function history()
     {
-        $questions = question::select('questions.*')
-                    ->where('user_id',\Auth::id())
-                    ->orderBy('updated_at','DESC')
+        $questions = Question::where('user_id',\Auth::id())
+                    ->orderBy('created_at','DESC')
                     ->get();
         $questions->load('category');
         return view('questions.history',compact('questions'));

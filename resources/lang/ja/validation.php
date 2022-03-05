@@ -156,7 +156,7 @@ return [
     'attributes' => [
         'title' => 'タイトル',
         'content' => '内容',
-        'comment' => 'コメント',
+        'answer' => '回答',
         'image' => 'ファイル',
     ],
 

@@ -30,14 +30,11 @@
                             <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
                         </div>
                         <select class="custom-select" id="category" name="category_id" required>
-                            <option value="">質問のタグを選んでください
+                            <option value="">質問のカテゴリーを選んでください
                             </option>
-                            <option value="1">ハーフパイプ</option>
-                            <option value="2">フリーラン</option>
-                            <option value="3">グラトリ</option>
-                            <option value="4">キッカー</option>
-                            <option value="5">ジブ</option>
-                            <option value="6">その他</option>
+                            @foreach($categorys as $category)
+                                <option value={{$category->id}}>{{$category->category_name}}</option>
+                            @endforeach
                         </select>   
                         <div class="mb-3">
                             <label for="formFileMultiple" class="form-label">Multiple files input example</label>

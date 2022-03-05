@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\CommentsRequest;
+use App\Http\Requests\AnswersRequest;
+use App\Models\Answer;
 
-use App\Models\Comment;
 
 
-class CommentsController extends Controller
+class AnswersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,12 +25,12 @@ class CommentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $data = \Request::query();
+        $input = $request->all();
         
-        return view('comments.create',[
-            'question_id' => $data['question_id'],
+        return view('answers.create',[
+            'question_id' => $input['question_id'],
         ]);
     }
 
@@ -40,13 +40,13 @@ class CommentsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CommentsRequest $request)
+    public function store(AnswersRequest $request)
     {
-        $comment = new Comment;
-        $input = $request->only($comment->getFillable());
-        $comment = $comment->create($input);
+        $answer = new Answer;
+        $answer->fill($request->all());
+        $answer->save();
         
-        return redirect('/question/'.$comment->question_id);
+        return redirect('/question/'.$answer->question_id);
     }
 
     /**
@@ -78,14 +78,7 @@ class CommentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
-    {
-        $inputs = $request->all();
-    
-        Comment::where('id',$inputs['id'])->update( [ 'status' => 1 ]);
-        
-        return view('questions.index');
-    }
+
 
     /**
      * Remove the specified resource from storage.

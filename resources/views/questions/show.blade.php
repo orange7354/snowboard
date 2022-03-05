@@ -26,46 +26,46 @@
         <small class="text-muted"><?php $updated_at = $asked_question['updated_at']; echo date('Y/m/d', strtotime($updated_at));?></small>
     </div>
     @if(Auth::user()->id !== $asked_question->user_id)
-    <a href="{{ route('comments.create',['question_id' => $asked_question->id])}}" class="btn btn-primary btn-lg btn-block">回答する</a>
+        <a href="{{ route('answers.create',['question_id' => $asked_question->id])}}" class="btn btn-primary btn-lg btn-block">回答する</a>
     @endif
 </div>
 
 
 @if(isset($asked_question['status']))
-    @foreach($asked_question->comments as $comment)
-        @if($asked_question['status'] === $comment['id'])
+    @foreach($asked_question->answers as $answer)
+        @if($asked_question['status'] === $answer['id'])
             <div class="card border-info mb-3">
                 <div class="card-header">
-                ベストアンサー: {{ $comment->user->name}}さん
+                ベストアンサー: {{ $answer->user->name}}さん
                 </div>
                 <div class="card-body">
-                    <p class="card-text">{{ $comment->comment }}</p>
+                    <p class="card-text">{{ $answer->answer }}</p>
                 </div>
             </div>
         @else
             <div class="card mt-5 mb-5">
                 <div class="card-header">
-                    {{ $comment->user->name}}さん
+                    {{ $answer->user->name}}さん
                 </div>
                 <div class="card-body">
-                    <p class="card-text">{{ $comment->comment }}</p>
+                    <p class="card-text">{{ $answer->answer }}</p>
                 </div>
             </div>
         @endif
     @endforeach
 @else
-    @foreach($asked_question->comments as $comment)
+    @foreach($asked_question->answers as $answer)
         <div class="card mt-5 mb-5">
             <div class="card-header">
-                {{ $comment->user->name}}さん
+                {{ $answer->user->name}}さん
             </div>
             <div class="card-body">
-                <p class="card-text">{{ $comment->comment }}</p>
+                <p class="card-text">{{ $answer->answer }}</p>
                 @if(Auth::user()->id === $asked_question->user_id)
                     <form  method="POST" action="{{ route('question.update')}}" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name='question_id' value="{{ $asked_question['id'] }}">
-                        <input type="hidden" name='id' value="{{ $comment['id'] }}">
+                        <input type="hidden" name='id' value="{{ $answer['id'] }}">
                         <div class="mb-3">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                                 ベストアンサーに選ぶ

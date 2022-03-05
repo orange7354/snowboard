@@ -52,10 +52,10 @@ class LoginController extends Controller
     public function guestLogin()
     {
         if (Auth::loginUsingId(self::GUEST_USER_ID)) {
-            return redirect('/title');
+            return redirect('/home');
         }
 
-        return redirect('/title');
+        return redirect('/home');
     }
     
 }

@@ -32,10 +32,6 @@
           <!-- <a class="nav-link" href="#">Link</a> -->
           <a class="nav-link" href="{{ route('question.history') }}" action="GET">質問履歴</a>
         </li>
-        <li class="nav-item">
-          <!-- <a class="nav-link disabled" href="#">Disabled</a> -->
-          <a  class="nav-link" href="{{ route('question.create') }}" method="GET" class="btn btn-primary my-2">質問する</a>
-        </li>
         @if(Route::has('login'))
             @auth
               <li class="nav-item">
@@ -73,7 +69,7 @@
     <h1 class="display-4">advance</h1>
     <p><strong>スキルアップを目指す人のためのQ&Aサイト</strong></p>
           <!-- <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p> -->
-          <p　class="text-info">スノーボードをより楽しむために「できない」を誰かが解決してくれます。</p>
+          <p class="text-black">スノーボードをより楽しむために「できない」を誰かが解決してくれます。</p>
           <!-- <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p> -->
           <p><a class="btn btn-primary btn-lg" href="{{ route('question.create') }}" method="GET" role="button">質問する &raquo;</a></p>
   </div>
@@ -82,7 +78,7 @@
       <div class=" col-10 pt-2  bg-white rounded shadow-sm">
           <!-- <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6> -->
           @isset($search_result)
-            <h1>{{ $search_result }}</h1>
+            <h1>{{ $search_result_message }}</h1>
           @endisset
           <h6 class="border-bottom border-gray pb-1 mb-0">新着質問</h6>
           @foreach($questions as $question)
@@ -92,7 +88,7 @@
                 <strong class="d-block text-primary"><a href="{{ route('question.show',$question->id ) }}">{{ $question['title'] }}</a></strong>
                 <!-- Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. -->
                 {{ $question->user->name }}さん 
-                <small class="text-muted"><?php $updated_at = $question['updated_at']; echo date('Y/m/d', strtotime($updated_at));?></small>
+                <small class="text-muted"><?php $created_at = $question['created_at']; echo date('Y/m/d', strtotime($created_at));?></small>
                 @if(isset($question['status']))
                   <span class="badge badge-success">解決済み</span>
                 @else
@@ -106,15 +102,12 @@
       <div class="col">
       <div class="card">
         <div class="card-header">
-          タグ一覧
+          カテゴリー
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item"><a href="{{ route('question.index',['category_id'=>1])}}">ハーフパイプ</a></li>
-          <li class="list-group-item"><a href="{{ route('question.index',['category_id'=>2])}}">フリーラン</a></li>
-          <li class="list-group-item"><a href="{{ route('question.index',['category_id'=>3])}}">グラトリ</a></li>
-          <li class="list-group-item"><a href="{{ route('question.index',['category_id'=>4])}}">キッカー</a></li>
-          <li class="list-group-item"><a href="{{ route('question.index',['category_id'=>5])}}">ジブ</a></li>
-          <li class="list-group-item"><a href="{{ route('question.index',['category_id'=>6])}}">その他</a></li>
+          @foreach($categorys as $category)
+            <li class="list-group-item"><a href="{{ route('question.index',['category_id'=>$category->id])}}">{{$category->category_name}}</a></li>
+          @endforeach
         </ul>
       </div>
     </div>
