@@ -84,7 +84,7 @@ return [
         'string' => ':attributeは255字以内でお願いします。',
         'array' => 'The :attribute must not have more than :max items.',
     ],
-    'mimes' => 'The :attribute must be a file of type: :values.',
+    'mimes' => ':attributeは: :valuesでお願いします。',
     'mimetypes' => 'The :attribute must be a file of type: :values.',
     'min' => [
         'numeric' => 'The :attribute must be at least :min.',

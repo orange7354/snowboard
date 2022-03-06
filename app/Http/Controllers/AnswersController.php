@@ -27,8 +27,8 @@ class AnswersController extends Controller
      */
     public function create(Request $request)
     {
+        // 回答投稿ページにquestion_idを渡す
         $input = $request->all();
-        
         return view('answers.create',[
             'question_id' => $input['question_id'],
         ]);
@@ -42,6 +42,7 @@ class AnswersController extends Controller
      */
     public function store(AnswersRequest $request)
     {
+        // viewから値を受け取りDBに保存
         $answer = new Answer;
         $answer->fill($request->all());
         $answer->save();

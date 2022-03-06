@@ -35,7 +35,7 @@ class LoginController extends Controller
     {
         return redirect(route('question.index'));
     }
-
+    // ゲストユーザーのIDを設定
     private const GUEST_USER_ID = 4;
 
     /**
@@ -48,7 +48,7 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-
+    // DBにゲストユーザーのIDがあればログイン
     public function guestLogin()
     {
         if (Auth::loginUsingId(self::GUEST_USER_ID)) {

@@ -19,12 +19,12 @@ class Question extends Model
 	}
 
     public function User(){
-		// 投稿は1つのカテゴリーに属する
+		// 投稿は一人のユーザーに属する
 		return $this->belongsTo(User::class,'user_id');
 	}
 
 	public function Answers(){
-		// 投稿は1つのカテゴリーに属する
+		// 投稿はたくさんの回答を持つ
 		return $this->hasMany(Answer::class,'question_id','id');
 	}
 

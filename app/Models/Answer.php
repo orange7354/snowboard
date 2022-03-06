@@ -14,7 +14,7 @@ class Answer extends Model
     ];
 
     public function User(){
-		// 投稿は1つのカテゴリーに属する
+		// 回答は一人のユーザーに属する
 		return $this->belongsTo(User::class,'user_id');
 	}
 }
