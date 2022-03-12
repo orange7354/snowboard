@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="ja" >
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" >
   <head>
-    <title>アルバムサンプル for Bootstrap · Bootstrap</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>advance</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/album.css') }}" rel="stylesheet">
   </head>
@@ -18,7 +18,7 @@
   <!-- Fixed navbar -->
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <!-- <a class="navbar-brand" href="#">Fixed navbar</a> -->
-    <a class="navbar-brand" href="#">Snowboard Q&A</a>
+    <a class="navbar-brand" href="#">advance</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -75,9 +75,9 @@
   </div>
   <div class="container mt-5">
     <div class="row">
-      <div class=" col-10 pt-2  bg-white rounded shadow-sm">
+      <div class=" col-md-10 pt-2  bg-white rounded shadow-sm">
           <!-- <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6> -->
-          @isset($search_result)
+          @isset($search_result_message)
             <h1>{{ $search_result_message }}</h1>
           @endisset
           <h6 class="border-bottom border-gray pb-1 mb-0">新着質問</h6>
@@ -98,21 +98,19 @@
             </div>
           @endforeach
           {{ $questions->links() }}
-      </div>
-      <div class="col">
-      <div class="card">
-        <div class="card-header">
-          カテゴリー
-        </div>
-        <ul class="list-group list-group-flush">
-          @foreach($categorys as $category)
-            <li class="list-group-item"><a href="{{ route('question.index',['category_id'=>$category->id])}}">{{$category->category_name}}</a></li>
-          @endforeach
-        </ul>
-      </div>
     </div>
-  </div>
-
+    <aside class="col-md-2 blog-sidebar">
+    <div class="card mt-3">
+      <div class="card-header">
+        カテゴリー
+      </div>
+      <ul class="list-group list-group">
+            @foreach($categorys as $category)
+              <li class="list-group-item"><a href="{{ route('question.index',['category_id'=>$category->id])}}">{{$category->category_name}}</a></li>
+            @endforeach
+      </ul>
+    </div>
+  </aside>
 </main>
 
 <footer class="text-muted">
@@ -123,16 +121,4 @@
     </p>
   </div>
 </footer>
-<script src="../../assets/js/vendor/holder.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script>
-  window.jQuery || document.write('<script src="/docs/4.5/assets/js/vendor/jquery-slim.min.js"><\/script>')
-</script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script><script src="/docs/4.5/assets/js/vendor/anchor.min.js"></script>
-<script src="/docs/4.5/assets/js/vendor/clipboard.min.js"></script>
-<script src="/docs/4.5/assets/js/vendor/bs-custom-file-input.min.js"></script>
-<script src="/docs/4.5/assets/js/src/application.js"></script>
-<script src="/docs/4.5/assets/js/src/search.js"></script>
-<script src="/docs/4.5/assets/js/src/ie-emulation-modes-warning.js"></script>
-  </body>
 </html>

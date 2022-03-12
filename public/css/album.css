@@ -4,16 +4,16 @@
     margin-bottom: 0;
     background-color: #fff;
   }
-  @media (min-width: 768px) {
+  @media (max-width:100rem) {
     .jumbotron {
       padding-top: 6rem;
       padding-bottom: 6rem;
       background-image: url('../images/header.jpg');
-      background-position: center center;
+      background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
       background-attachment: fixed;
-    }
+      }
   }
   
   
@@ -28,6 +28,7 @@
   .jumbotron .container {
     max-width: 40rem;
   }
+
   
   footer {
     padding-top: 3rem;

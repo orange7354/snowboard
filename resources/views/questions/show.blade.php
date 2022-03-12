@@ -10,11 +10,11 @@
         <p class="card-text">{{ $asked_question['content'] }}</p>
         @if(isset($asked_question['video']))
             <video controls autoplay muted >
-                <source src="{{ '/storage/'.$asked_question['video'] }}" type="video/mp4" >
+                <source src="{{ $asked_question->video }}" type="video/mp4" >
             </video>
         @elseif(isset($asked_question['image']))
             <div class="text-center">
-                <img src="{{ '/storage/'.$asked_question['image'] }}" class=" img-responsive center-block;" alt="Responsive image" width="1000" height="500">
+                <img src="{{ $asked_question->image }}" class=" img-responsive center-block;" alt="Responsive image" width="1000" height="500">
             </div>
         @endif
     </div>
@@ -35,29 +35,10 @@
         <form action="{{route('question.delete',$asked_question->id)}}" method="POST" class="float-right">
             @csrf
             @method('delete')
-            <div class="mb-3">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <div>
+                <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                     削除
                 </button>
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">削除</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            元に戻らないですが大丈夫ですか？
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">OK!</button>
-                        </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </form>
     @endif

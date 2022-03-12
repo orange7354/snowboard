@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests\QuestionsRequest;
 
-use App\Models\question;
+use App\Models\Question;
 use App\Models\Tag;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
@@ -31,8 +31,7 @@ class QuestionController extends Controller
             $questions->load('category','user');
             $categorys = Category::select()->get();
         }else{
-            $questions = Question::select()
-            ->orderBy('created_at','DESC')
+            $questions = Question::orderBy('created_at','DESC')
             ->simplePaginate(15);
             $questions->load('category','user');
             $categorys = Category::select()->get(); 
@@ -61,7 +60,6 @@ class QuestionController extends Controller
      */
     public function store(QuestionsRequest $request)
     {   
-        // 質問作成ページからデーターを受け取りDBに保存
         $question = new question;
         $question->fill($request->all());
         $image = $request->file('image');
@@ -72,21 +70,16 @@ class QuestionController extends Controller
         if($request->hasFile('image')){
             // 取得した拡張子が'jpg'のときimageカラムに保存
             if($fileName=='jpg'){
-                $path = \Storage::put('/public',$image);
-                $path = explode('/',$path);
-                $question->image = $path[1];
-                $question->save();
+                $path = Storage::disk('s3')->put('/image',$image,'public');
+                $question->image = Storage::disk('s3')->url($path);
             // // 取得した拡張子が'mp4'のときvideoカラムに保存
             }elseif($fileName=='mp4'){
-                $path = \Storage::put('/public',$image);
-                $path = explode('/',$path);
-                $question->video = $path[1];
-                $question->save();
+                $path = Storage::disk('s3')->put('/video',$image,'public');
+                $question->video = Storage::disk('s3')->url($path);
             }
-        }else{
-            $question->save();
         }
-        
+        $question->save();
+            
         return  redirect( route('question.index'));
     }
 

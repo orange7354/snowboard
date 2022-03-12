@@ -1,9 +1,12 @@
 <!doctype html>
-<html lang="ja" >
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
-    <title>アルバムサンプル for Bootstrap · Bootstrap</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>advance</title>
     <link href="{{ asset('css/album.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
   </head>
@@ -18,7 +21,7 @@
   <!-- Fixed navbar -->
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <!-- <a class="navbar-brand" href="#">Fixed navbar</a> -->
-    <a class="navbar-brand" href="#">Snowboard Q&A</a>
+    <a class="navbar-brand" href="#">advance</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -81,16 +84,5 @@
     </p>
   </div>
 </footer>
-<script src="../../assets/js/vendor/holder.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script>
-  window.jQuery || document.write('<script src="/docs/4.5/assets/js/vendor/jquery-slim.min.js"><\/script>')
-</script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script><script src="/docs/4.5/assets/js/vendor/anchor.min.js"></script>
-<script src="/docs/4.5/assets/js/vendor/clipboard.min.js"></script>
-<script src="/docs/4.5/assets/js/vendor/bs-custom-file-input.min.js"></script>
-<script src="/docs/4.5/assets/js/src/application.js"></script>
-<script src="/docs/4.5/assets/js/src/search.js"></script>
-<script src="/docs/4.5/assets/js/src/ie-emulation-modes-warning.js"></script>
-  </body>
+</body>
 </html>
